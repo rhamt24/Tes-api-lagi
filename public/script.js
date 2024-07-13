@@ -35,15 +35,29 @@ document.getElementById('search-form').addEventListener('submit', async function
             const downloadButton = document.createElement('button');
             downloadButton.className = 'download-btn';
             downloadButton.textContent = 'Download';
-            downloadButton.onclick = () => {
-                window.location.href = `/download?id=${track.id}`;
+            downloadButton.onclick = async () => {
+                const downloadResponse = await fetch(`/download?id=${track.id}`);
+                const downloadData = await downloadResponse.json();
+                if (downloadData.status) {
+                    window.location.href = downloadData.data.download;
+                } else {
+                    alert('Failed to download track.');
+                }
             };
             trackInfoDiv.appendChild(downloadButton);
 
             trackDiv.appendChild(trackInfoDiv);
             resultsDiv.appendChild(trackDiv);
         });
+
+        document.getElementById('back-button').style.display = 'block';
     } else {
         resultsDiv.textContent = 'No tracks found!';
     }
+});
+
+document.getElementById('back-button').addEventListener('click', function() {
+    document.getElementById('search-form').style.display = 'flex';
+    document.getElementById('back-button').style.display = 'none';
+    document.getElementById('results').innerHTML = '';
 });
