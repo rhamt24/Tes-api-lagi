@@ -12,6 +12,10 @@ document.getElementById('search-form').addEventListener('submit', async function
             const trackDiv = document.createElement('div');
             trackDiv.className = 'track';
 
+            const thumbnail = document.createElement('img');
+            thumbnail.src = track.thumbnail;
+            trackDiv.appendChild(thumbnail);
+
             const trackInfoDiv = document.createElement('div');
             trackInfoDiv.className = 'track-info';
 
