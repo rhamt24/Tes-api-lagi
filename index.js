@@ -65,6 +65,30 @@ async function searching(query, type = 'track', limit = 20) {
     }
 }
 
+async function getFullTrack(url) {
+    try {
+        const response = await axios.get(`https://api.fabdl.com/spotify/get?url=${encodeURIComponent(url)}`);
+        const trackId = response.data.result.id;
+        const taskResponse = await axios.get(`https://api.fabdl.com/spotify/mp3-convert-task/${response.data.result.gid}/${trackId}`, {
+            headers: {
+                accept: 'application/json, text/plain, */*',
+                'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
+                'sec-ch-ua': '"Not)A;Brand";v="24", "Chromium";v="116"',
+                'sec-ch-ua-mobile': '?1',
+                'sec-ch-ua-platform': '"Android"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'cross-site',
+                Referer: 'https://spotifydownload.org/',
+                'Referrer-Policy': 'strict-origin-when-cross-origin'
+            }
+        });
+        return `https://api.fabdl.com${taskResponse.data.result.download_url}`;
+    } catch (e) {
+        return null;
+    }
+}
+
 app.get('/search', async (req, res) => {
     const { query, type, limit } = req.query;
     const result = await searching(query, type, limit);
@@ -81,34 +105,24 @@ app.get('/download', async (req, res) => {
                 Authorization: `Bearer ${creds.data.access_token}`
             }
         });
-        const downloadUrl = `https://api.fabdl.com/spotify/get?url=${encodeURIComponent(trackInfo.data.external_urls.spotify)}`;
-        const downloadResponse = await axios.get(downloadUrl);
-        const fullTrack = await axios.get(`https://api.fabdl.com/spotify/mp3-convert-task/${downloadResponse.data.result.gid}/${downloadResponse.data.result.id}`, {
-            headers: {
-                accept: 'application/json, text/plain, */*',
-                'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-                'sec-ch-ua': '"Not)A;Brand";v="24", "Chromium";v="116"',
-                'sec-ch-ua-mobile': '?1',
-                'sec-ch-ua-platform': '"Android"',
-                'sec-fetch-dest': 'empty',
-                'sec-fetch-mode': 'cors',
-                'sec-fetch-site': 'cross-site',
-                Referer: 'https://spotifydownload.org/',
-                'Referrer-Policy': 'strict-origin-when-cross-origin'
-            }
-        });
-        const result = {
-            title: trackInfo.data.name,
-            type: trackInfo.data.type,
-            artist: trackInfo.data.artists.map(artist => artist.name).join(', '),
-            duration: convert(trackInfo.data.duration_ms),
-            image: trackInfo.data.album.images[0].url,
-            download: `https://api.fabdl.com${fullTrack.data.result.download_url}`
-        };
-        res.json({
-            status: true,
-            data: result
-        });
+        const downloadUrl = await getFullTrack(trackInfo.data.external_urls.spotify);
+        if (downloadUrl) {
+            res.json({
+                status: true,
+                data: {
+                    title: trackInfo.data.name,
+                    artist: trackInfo.data.artists.map(artist => artist.name).join(', '),
+                    duration: convert(trackInfo.data.duration_ms),
+                    image: trackInfo.data.album.images[0].url,
+                    download: downloadUrl
+                }
+            });
+        } else {
+            res.json({
+                status: false,
+                msg: 'Failed to retrieve full track.'
+            });
+        }
     } catch (e) {
         res.json({
             status: false,
