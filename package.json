@@ -1,0 +1,15 @@
+{
+  "name": "spotify-api",
+  "version": "1.0.0",
+  "description": "A simple Spotify track search API with a web interface.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1"
+  }
+}
