@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify Downloader</title>
+    <title>Streaming and Downloader Spotify</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Spotify Downloader</h1>
-        <button id="toggle-mode">Toggle Night Mode</button>
+        <button id="toggle-mode">Night Mode</button>
         <form id="search-form">
             <input type="text" id="search-query" placeholder="Enter song title" required>
             <button type="submit">Search</button>
         </form>
         <button id="back-button">Back to Search</button>
         <div id="results"></div>
-        <div class="footer">
+        <div class="footer" id="home-footer">
             <p>About: This web app allows you to search and download Spotify tracks easily.</p>
             <p>Purpose: To provide an easy way to download and listen to Spotify music.</p>
             <button id="creator-button">Creator</button>
         </div>
+    </div>
+    <div class="footer" id="footer-text">
+        <p>&copy; 2024 Zals . All rights reserved.</p>
     </div>
     <script src="script.js"></script>
 </body>
