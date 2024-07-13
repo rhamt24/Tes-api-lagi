@@ -65,7 +65,8 @@ async function searching(query, type = 'track', limit = 20) {
                 popularity: v.popularity + '%',
                 preview: v.preview_url,
                 url: v.external_urls.spotify,
-                id: v.id
+                id: v.id,
+                thumbnail: v.album.images[0].url // Adding the thumbnail URL
             }));
             resolve({
                 creator: 'Budy x creator',
