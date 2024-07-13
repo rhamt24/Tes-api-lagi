@@ -67,6 +67,7 @@ document.getElementById('search-form').addEventListener('submit', async function
 
         document.getElementById('back-button').style.display = 'block';
         document.getElementById('search-form').style.display = 'none';
+        document.getElementById('home-footer').style.display = 'none';
     } else {
         resultsDiv.textContent = 'No tracks found!';
     }
@@ -76,10 +77,20 @@ document.getElementById('back-button').addEventListener('click', function() {
     document.getElementById('search-form').style.display = 'flex';
     document.getElementById('back-button').style.display = 'none';
     document.getElementById('results').innerHTML = '';
+    document.getElementById('home-footer').style.display = 'block';
 });
 
 document.getElementById('toggle-mode').addEventListener('click', function() {
     document.body.classList.toggle('night-mode');
+    const toggleButton = document.getElementById('toggle-mode');
+    toggleButton.textContent = document.body.classList.contains('night-mode') ? 'Light Mode' : 'Night Mode';
+
+    const searchInput = document.getElementById('search-query');
+    if (document.body.classList.contains('night-mode')) {
+        searchInput.classList.add('night-mode');
+    } else {
+        searchInput.classList.remove('night-mode');
+    }
 });
 
 document.getElementById('creator-button').addEventListener('click', function() {
