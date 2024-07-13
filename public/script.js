@@ -9,7 +9,7 @@ document.getElementById('search-form').addEventListener('submit', async function
     
     if (data.status) {
         resultsDiv.innerHTML = '';
-        data.data.forEach(track => {
+        data.data.forEach(async track => {
             const trackDiv = document.createElement('div');
             trackDiv.className = 'track';
 
@@ -30,15 +30,19 @@ document.getElementById('search-form').addEventListener('submit', async function
 
             const audio = document.createElement('audio');
             audio.controls = true;
-            audio.src = track.preview;
+            const downloadResponse = await fetch(`/download?id=${track.id}`);
+            const downloadData = await downloadResponse.json();
+            if (downloadData.status) {
+                audio.src = downloadData.data.download;
+            } else {
+                audio.src = track.preview;
+            }
             trackInfoDiv.appendChild(audio);
 
             const downloadButton = document.createElement('button');
             downloadButton.className = 'download-btn';
             downloadButton.textContent = 'Download';
-            downloadButton.onclick = async () => {
-                const downloadResponse = await fetch(`/download?id=${track.id}`);
-                const downloadData = await downloadResponse.json();
+            downloadButton.onclick = () => {
                 if (downloadData.status) {
                     window.location.href = downloadData.data.download;
                 } else {
