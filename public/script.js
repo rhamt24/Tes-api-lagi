@@ -66,6 +66,7 @@ document.getElementById('search-form').addEventListener('submit', async function
         }
 
         document.getElementById('back-button').style.display = 'block';
+        document.getElementById('search-form').style.display = 'none';
     } else {
         resultsDiv.textContent = 'No tracks found!';
     }
@@ -75,4 +76,12 @@ document.getElementById('back-button').addEventListener('click', function() {
     document.getElementById('search-form').style.display = 'flex';
     document.getElementById('back-button').style.display = 'none';
     document.getElementById('results').innerHTML = '';
+});
+
+document.getElementById('toggle-mode').addEventListener('click', function() {
+    document.body.classList.toggle('night-mode');
+});
+
+document.getElementById('creator-button').addEventListener('click', function() {
+    window.location.href = 'https://zals.zalxzhu.my.id'; // Replace with your website URL
 });
