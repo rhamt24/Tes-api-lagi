@@ -1,13 +1,14 @@
-document.getElementById('search-form').addEventListener('submit', async function(event) {
-    event.preventDefault();
+document.getElementById('search-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
     const query = document.getElementById('search-query').value;
-    const response = await fetch(`/search?query=${encodeURIComponent(query)}&type=track&limit=10`);
-    const data = await response.json();
-
     const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = '';
-
+    resultsDiv.innerHTML = 'Searching...';
+    
+    const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+    const data = await response.json();
+    
     if (data.status) {
+        resultsDiv.innerHTML = '';
         data.data.forEach(track => {
             const trackDiv = document.createElement('div');
             trackDiv.className = 'track';
