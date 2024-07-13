@@ -1,22 +1,11 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
-.container {
-    max-width: 800px;
-    margin: 50px auto;
     padding: 20px;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    margin: 0;
 }
 
 h1 {
     text-align: center;
-    color: #333;
 }
 
 form {
@@ -26,114 +15,63 @@ form {
 }
 
 input[type="text"] {
-    flex: 1;
     padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
     font-size: 16px;
+    width: 300px;
+    margin-right: 10px;
 }
 
 button {
     padding: 10px 20px;
-    border: none;
-    background: #28a745;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
     font-size: 16px;
 }
 
-button:hover {
-    background: #218838;
-}
-
-#results {
-    margin-top: 20px;
+#back-button {
+    display: none;
+    margin: 20px 0;
+    padding: 10px 20px;
+    font-size: 16px;
 }
 
 .track {
     display: flex;
-    flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
 .track img {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+    border-radius: 8px;
 }
 
 .track-info {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .track-info h3 {
-    margin: 0;
-    font-size: 1.2em;
-    color: #333;
+    margin: 0 0 10px;
+    font-size: 18px;
 }
 
 .track-info p {
     margin: 5px 0;
-    color: #555;
 }
 
 .track-info audio {
     width: 100%;
-    margin-top: 10px;
 }
 
 .download-btn {
-    background: #007bff;
-    color: #fff;
+    align-self: flex-start;
     padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     margin-top: 10px;
-}
-
-.download-btn:hover {
-    background: #0069d9;
-}
-
-#back-button {
-    margin-top: 20px;
-    display: block;
-    padding: 10px;
-    border: none;
-    background: #007bff;
-    color: #fff;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-}
-
-#back-button:hover {
-    background: #0069d9;
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 10px;
-    }
-
-    form {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    input[type="text"] {
-        margin-bottom: 10px;
-        margin-right: 0;
-        width: 100%;
-    }
 }
