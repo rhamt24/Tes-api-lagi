@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify Track Search</title>
+    <title>Spotify Downloader</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Spotify Track Search</h1>
+        <h1>Spotify Downloader</h1>
+        <button id="toggle-mode">Toggle Night Mode</button>
         <form id="search-form">
-            <input type="text" id="search-query" placeholder="Enter track title" required>
+            <input type="text" id="search-query" placeholder="Enter song title" required>
             <button type="submit">Search</button>
         </form>
-        <button id="back-button" style="display:none;">Back to Search</button>
+        <button id="back-button">Back to Search</button>
         <div id="results"></div>
+        <div class="footer">
+            <p>About: This web app allows you to search and download Spotify tracks easily.</p>
+            <p>Purpose: To provide an easy way to download and listen to Spotify music.</p>
+            <button id="creator-button">Creator</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
