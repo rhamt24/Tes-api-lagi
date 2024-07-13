@@ -3,10 +3,10 @@ document.getElementById('search-form').addEventListener('submit', async function
     const query = document.getElementById('search-query').value;
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = 'Searching...';
-    
+
     const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
     const data = await response.json();
-    
+
     if (data.status) {
         resultsDiv.innerHTML = '';
         for (const track of data.data) {
@@ -30,7 +30,7 @@ document.getElementById('search-form').addEventListener('submit', async function
 
             const audio = document.createElement('audio');
             audio.controls = true;
-            audio.style.width = '100%'; // Set uniform width for audio bars
+            audio.style.width = '100%';
 
             const downloadResponse = await fetch(`/download?id=${track.id}`);
             const downloadData = await downloadResponse.json();
@@ -40,12 +40,18 @@ document.getElementById('search-form').addEventListener('submit', async function
                 source.type = 'audio/mpeg';
                 source.setAttribute('title', track.title);
                 audio.appendChild(source);
+                audio.addEventListener('play', function() {
+                    showMusicContainer(downloadData.data.download);
+                });
             } else {
                 const source = document.createElement('source');
                 source.src = track.preview;
                 source.type = 'audio/mpeg';
                 source.setAttribute('title', track.title);
                 audio.appendChild(source);
+                audio.addEventListener('play', function() {
+                    showMusicContainer(track.preview);
+                });
             }
             trackInfoDiv.appendChild(audio);
 
@@ -96,3 +102,21 @@ document.getElementById('toggle-mode').addEventListener('click', function() {
 document.getElementById('creator-button').addEventListener('click', function() {
     window.location.href = 'https://zals.zalxzhu.my.id'; // Replace with your website URL
 });
+
+document.getElementById('close-music').addEventListener('click', function() {
+    hideMusicContainer();
+});
+
+function showMusicContainer(audioSrc) {
+    const musicContainer = document.getElementById('music-container');
+    const mainAudio = document.getElementById('main-audio');
+    mainAudio.src = audioSrc;
+    musicContainer.style.display = 'block';
+}
+
+function hideMusicContainer() {
+    const musicContainer = document.getElementById('music-container');
+    const mainAudio = document.getElementById('main-audio');
+    mainAudio.pause();
+    musicContainer.style.display = 'none';
+}
