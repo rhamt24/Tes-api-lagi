@@ -2,6 +2,13 @@ body {
     font-family: Arial, sans-serif;
     padding: 20px;
     margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+body.night-mode {
+    background-color: #121212;
+    color: #fff;
 }
 
 h1 {
@@ -24,6 +31,7 @@ input[type="text"] {
 button {
     padding: 10px 20px;
     font-size: 16px;
+    cursor: pointer;
 }
 
 #back-button {
@@ -74,4 +82,23 @@ button {
     font-size: 14px;
     margin-top: 10px;
     cursor: pointer;
+}
+
+.footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#toggle-mode {
+    display: block;
+    margin: 0 auto 20px;
 }
