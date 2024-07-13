@@ -9,7 +9,7 @@ document.getElementById('search-form').addEventListener('submit', async function
     
     if (data.status) {
         resultsDiv.innerHTML = '';
-        data.data.forEach(async track => {
+        for (const track of data.data) {
             const trackDiv = document.createElement('div');
             trackDiv.className = 'track';
 
@@ -30,12 +30,22 @@ document.getElementById('search-form').addEventListener('submit', async function
 
             const audio = document.createElement('audio');
             audio.controls = true;
+            audio.style.width = '100%'; // Set uniform width for audio bars
+
             const downloadResponse = await fetch(`/download?id=${track.id}`);
             const downloadData = await downloadResponse.json();
             if (downloadData.status) {
-                audio.src = downloadData.data.download;
+                const source = document.createElement('source');
+                source.src = downloadData.data.download;
+                source.type = 'audio/mpeg';
+                source.setAttribute('title', track.title);
+                audio.appendChild(source);
             } else {
-                audio.src = track.preview;
+                const source = document.createElement('source');
+                source.src = track.preview;
+                source.type = 'audio/mpeg';
+                source.setAttribute('title', track.title);
+                audio.appendChild(source);
             }
             trackInfoDiv.appendChild(audio);
 
@@ -53,7 +63,7 @@ document.getElementById('search-form').addEventListener('submit', async function
 
             trackDiv.appendChild(trackInfoDiv);
             resultsDiv.appendChild(trackDiv);
-        });
+        }
 
         document.getElementById('back-button').style.display = 'block';
     } else {
