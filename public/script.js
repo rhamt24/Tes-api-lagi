@@ -31,7 +31,7 @@ document.getElementById('search-form').addEventListener('submit', async function
             const audio = document.createElement('audio');
             audio.controls = true;
             audio.style.width = '100%';
-            audio.src = track.url; // Use full track URL if available
+            audio.src = track.url; // Gunakan URL lagu penuh di sini
             audio.addEventListener('play', function() {
                 stopOtherAudios(audio);
                 showMusicContainer(track);
@@ -87,7 +87,7 @@ function showMusicContainer(track) {
     currentTrack = track;
     musicContainer.style.display = 'block';
     document.getElementById('current-track-title').textContent = track.title;
-    mainAudio.src = track.url; // Use full track URL if available
+    mainAudio.src = track.url; // Gunakan URL lagu penuh di sini
     mainAudio.currentTime = 0;
     mainAudio.play();
 }
