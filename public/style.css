@@ -44,7 +44,7 @@ body {
     outline: none;
 }
 
-#search-query.night-mode {
+.night-mode #search-query {
     background-color: #333;
     color: white;
     border: 1px solid #555;
