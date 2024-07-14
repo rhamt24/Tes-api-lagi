@@ -40,23 +40,20 @@ document.getElementById('search-form').addEventListener('submit', async function
             audio.style.width = '100%';
             audio.addEventListener('play', function() {
                 showMusicContainer(audio, track.title);
+                stopOtherAudios(audio);
             });
 
             const downloadResponse = await fetch(`/download?id=${track.id}`);
             const downloadData = await downloadResponse.json();
+            const source = document.createElement('source');
             if (downloadData.status) {
-                const source = document.createElement('source');
                 source.src = downloadData.data.download;
-                source.type = 'audio/mpeg';
-                source.setAttribute('title', track.title);
-                audio.appendChild(source);
             } else {
-                const source = document.createElement('source');
                 source.src = track.preview;
-                source.type = 'audio/mpeg';
-                source.setAttribute('title', track.title);
-                audio.appendChild(source);
             }
+            source.type = 'audio/mpeg';
+            source.setAttribute('title', track.title);
+            audio.appendChild(source);
             trackInfoDiv.appendChild(audio);
 
             const downloadButton = document.createElement('button');
@@ -177,7 +174,7 @@ function playTrack() {
     const mainAudio = document.getElementById('main-audio');
     const trackTitle = document.getElementById('current-track-title');
 
-    const audioSrc = track.preview;
+    const audioSrc = track.preview; // Use full track URL if available
     trackTitle.textContent = track.title;
     mainAudio.src = audioSrc;
     mainAudio.play();
@@ -187,5 +184,14 @@ function syncAudioTime(sourceAudio, targetAudio) {
     targetAudio.currentTime = sourceAudio.currentTime;
     sourceAudio.addEventListener('timeupdate', () => {
         targetAudio.currentTime = sourceAudio.currentTime;
+    });
+}
+
+function stopOtherAudios(currentAudio) {
+    const audios = document.querySelectorAll('audio');
+    audios.forEach(audio => {
+        if (audio !== currentAudio) {
+            audio.pause();
+        }
     });
 }
