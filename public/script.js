@@ -1,89 +1,122 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('search-button').addEventListener('click', async function() {
-        const query = document.getElementById('search-query').value;
-        const response = await fetch(`/api/search?query=${query}`);
-        const data = await response.json();
+document.getElementById('search-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const query = document.getElementById('search-query').value;
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = 'Searching...';
 
-        const resultsContainer = document.getElementById('results-container');
-        resultsContainer.innerHTML = '';
-        data.tracks.forEach(track => {
-            const trackElement = document.createElement('div');
-            trackElement.classList.add('track');
-            trackElement.innerHTML = `
-                <img src="${track.thumbnail}" alt="Thumbnail">
-                <div class="track-info">
-                    <h3>${track.title}</h3>
-                    <p>Duration: ${track.duration}</p>
-                    <button onclick="playTrack('${track.id}')">Play</button>
-                    <button onclick="downloadTrack('${track.id}')">Download</button>
-                </div>
-            `;
-            resultsContainer.appendChild(trackElement);
-        });
-    });
+    const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+    const data = await response.json();
 
-    window.playTrack = async function(id) {
-        const response = await fetch(`/api/getTrack?id=${id}`);
-        const data = await response.json();
-        const musicContainer = document.getElementById('music-container');
-        const mainAudio = document.getElementById('main-audio');
+    if (data.status) {
+        resultsDiv.innerHTML = '';
+        for (const track of data.data) {
+            const trackDiv = document.createElement('div');
+            trackDiv.className = 'track';
 
-        showMusicContainer(data.track, data.audioSrc);
+            const thumbnail = document.createElement('img');
+            thumbnail.src = track.thumbnail;
+            trackDiv.appendChild(thumbnail);
 
-        mainAudio.src = data.audioSrc;
-        mainAudio.play();
-    };
+            const trackInfoDiv = document.createElement('div');
+            trackInfoDiv.className = 'track-info';
 
-    window.downloadTrack = async function(id) {
-        const response = await fetch(`/api/download?id=${id}`);
-        const data = await response.json();
-        window.location.href = data.downloadUrl;
-    };
+            const title = document.createElement('h3');
+            title.textContent = track.title;
+            trackInfoDiv.appendChild(title);
 
-    document.getElementById('mode-button').addEventListener('click', function() {
-        document.body.classList.toggle('night-mode');
-        this.textContent = document.body.classList.contains('night-mode') ? 'Light Mode' : 'Night Mode';
+            const duration = document.createElement('p');
+            duration.textContent = `Duration: ${track.duration}`;
+            trackInfoDiv.appendChild(duration);
 
-        const searchInput = document.getElementById('search-query');
-        if (document.body.classList.contains('night-mode')) {
-            searchInput.classList.add('night-mode');
-        } else {
-            searchInput.classList.remove('night-mode');
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.style.width = '100%';
+
+            const downloadResponse = await fetch(`/download?id=${track.id}`);
+            const downloadData = await downloadResponse.json();
+            if (downloadData.status) {
+                const source = document.createElement('source');
+                source.src = downloadData.data.download;
+                source.type = 'audio/mpeg';
+                source.setAttribute('title', track.title);
+                audio.appendChild(source);
+                audio.addEventListener('play', function() {
+                    showMusicContainer(downloadData.data.download);
+                });
+            } else {
+                const source = document.createElement('source');
+                source.src = track.preview;
+                source.type = 'audio/mpeg';
+                source.setAttribute('title', track.title);
+                audio.appendChild(source);
+                audio.addEventListener('play', function() {
+                    showMusicContainer(track.preview);
+                });
+            }
+            trackInfoDiv.appendChild(audio);
+
+            const downloadButton = document.createElement('button');
+            downloadButton.className = 'download-btn';
+            downloadButton.textContent = 'Download';
+            downloadButton.onclick = () => {
+                if (downloadData.status) {
+                    window.location.href = downloadData.data.download;
+                } else {
+                    alert('Failed to download track.');
+                }
+            };
+            trackInfoDiv.appendChild(downloadButton);
+
+            trackDiv.appendChild(trackInfoDiv);
+            resultsDiv.appendChild(trackDiv);
         }
-    });
 
-    document.getElementById('creator-button').addEventListener('click', function() {
-        window.location.href = 'https://zals.zalxzhu.my.id'; // Replace with your website URL
-    });
-
-    document.getElementById('close-music').addEventListener('click', function() {
-        hideMusicContainer();
-    });
-
-    function showMusicContainer(track, audioSrc) {
-        const musicContainer = document.getElementById('music-container');
-        const homeTrack = document.getElementById('home-track');
-
-        homeTrack.innerHTML = `
-            <div class="track">
-                <img src="${track.thumbnail}" alt="Thumbnail">
-                <div class="track-info">
-                    <h3>${track.title}</h3>
-                    <p>Duration: ${track.duration}</p>
-                    <audio controls>
-                        <source src="${audioSrc}" type="audio/mpeg">
-                    </audio>
-                </div>
-            </div>
-        `;
-        musicContainer.style.display = 'block';
-        musicContainer.classList.add('show');
-    }
-
-    function hideMusicContainer() {
-        const musicContainer = document.getElementById('music-container');
-        const mainAudio = document.getElementById('main-audio');
-        mainAudio.pause();
-        musicContainer.classList.remove('show');
+        document.getElementById('back-button').style.display = 'block';
+        document.getElementById('search-form').style.display = 'none';
+        document.getElementById('home-footer').style.display = 'none';
+    } else {
+        resultsDiv.textContent = 'No tracks found!';
     }
 });
+
+document.getElementById('back-button').addEventListener('click', function() {
+    document.getElementById('search-form').style.display = 'flex';
+    document.getElementById('back-button').style.display = 'none';
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('home-footer').style.display = 'block';
+});
+
+document.getElementById('toggle-mode').addEventListener('click', function() {
+    document.body.classList.toggle('night-mode');
+    const toggleButton = document.getElementById('toggle-mode');
+    toggleButton.textContent = document.body.classList.contains('night-mode') ? 'Light Mode' : 'Night Mode';
+
+    const searchInput = document.getElementById('search-query');
+    if (document.body.classList.contains('night-mode')) {
+        searchInput.classList.add('night-mode');
+    } else {
+        searchInput.classList.remove('night-mode');
+    }
+});
+
+document.getElementById('creator-button').addEventListener('click', function() {
+    window.location.href = 'https://zals.zalxzhu.my.id'; // Replace with your website URL
+});
+
+document.getElementById('close-music').addEventListener('click', function() {
+    hideMusicContainer();
+});
+
+function showMusicContainer(audioSrc) {
+    const musicContainer = document.getElementById('music-container');
+    const mainAudio = document.getElementById('main-audio');
+    mainAudio.src = audioSrc;
+    musicContainer.style.display = 'block';
+}
+
+function hideMusicContainer() {
+    const musicContainer = document.getElementById('music-container');
+    const mainAudio = document.getElementById('main-audio');
+    mainAudio.pause();
+    musicContainer.style.display = 'none';
+}
