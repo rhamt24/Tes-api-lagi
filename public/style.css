@@ -1,133 +1,179 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: white;
-    color: black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.night-mode {
-    background-color: #121212;
-    color: white;
-}
-
-.container {
-    max-width: 600px;
-    width: 100%;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    margin-top: 20px;
-    background-color: white;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.night-mode .container {
-    background-color: #1e1e1e;
+body.night-mode {
+    background-color: #121212;
+    color: #fff;
 }
 
-#search-container {
+h1 {
+    text-align: center;
+}
+
+form {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 10px;
     margin-bottom: 20px;
 }
 
-#search-query {
+input[type="text"] {
     padding: 10px;
-    border-radius: 20px;
+    font-size: 16px;
+    width: 300px;
+    margin-right: 10px;
+    color: #000;
+    border-radius: 20px; /* Rounded corners */
     border: 1px solid #ccc;
-    flex-grow: 1;
-    outline: none;
 }
 
-.night-mode #search-query {
+input[type="text"].night-mode {
     background-color: #333;
-    color: white;
+    color: #fff;
     border: 1px solid #555;
 }
 
 button {
     padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    background-color: green;
-    color: white;
+    font-size: 16px;
     cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #45a049;
+    transform: scale(1.05);
 }
 
-#mode-button {
-    margin-bottom: 20px;
+button:active {
+    transform: scale(0.95);
+}
+
+.button.green {
     background-color: green;
+    color: white;
 }
 
-#about {
+.button.blue {
+    background-color: blue;
+    color: white;
+}
+
+.button.red {
+    background-color: red;
+    color: white;
+}
+
+#back-button {
+    display: none;
     margin: 20px 0;
-    text-align: center;
+    padding: 10px 20px;
+    font-size: 16px;
 }
 
-#creator-button {
-    background-color: green;
+#music-container {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    padding: 10px;
+    background-color: #d0e6f5;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
-#results-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+body.night-mode #music-container {
+    background-color: #333;
+}
+
+#close-music {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .track {
     display: flex;
     align-items: center;
-    gap: 10px;
+    margin-bottom: 20px;
     padding: 10px;
-    border-radius: 10px;
-    background-color: lightblue;
+    border-radius: 8px;
+    background-color: #d0e6f5;
+    transition: background-color 0.3s ease;
 }
 
-.night-mode .track {
-    background-color: gray;
+body.night-mode .track {
+    background-color: #333;
+}
+
+.track img {
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+    border-radius: 8px;
 }
 
 .track-info {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
 }
 
-#music-container {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+.track-info h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.track-info p {
+    margin: 5px 0;
+}
+
+.track-info audio {
+    width: 100%;
+}
+
+.download-btn {
+    align-self: flex-start;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.footer {
     margin-top: 20px;
-}
-
-#music-container.show {
-    display: flex;
-}
-
-.close-button {
-    align-self: flex-end;
-    background-color: red;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#footer {
     text-align: center;
-    margin-top: 20px;
 }
 
-.hidden {
-    display: none;
+.footer p {
+    margin: 5px 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#toggle-mode {
+    display: block;
+    margin: 0 auto 20px;
+}
+
+#footer-text {
+    margin-top: 40px;
+    text-align: center;
 }
