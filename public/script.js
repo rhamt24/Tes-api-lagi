@@ -1,7 +1,3 @@
-let currentTrackIndex = -1;
-let tracks = [];
-let isAutoplay = false;
-
 document.getElementById('search-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const query = document.getElementById('search-query').value;
@@ -13,10 +9,7 @@ document.getElementById('search-form').addEventListener('submit', async function
 
     if (data.status) {
         resultsDiv.innerHTML = '';
-        tracks = data.data;
-        currentTrackIndex = 0;
-
-        for (const track of tracks) {
+        for (const track of data.data) {
             const trackDiv = document.createElement('div');
             trackDiv.className = 'track';
 
@@ -38,28 +31,19 @@ document.getElementById('search-form').addEventListener('submit', async function
             const audio = document.createElement('audio');
             audio.controls = true;
             audio.style.width = '100%';
+            audio.src = track.preview; // Use full track URL if available
             audio.addEventListener('play', function() {
-                showMusicContainer(audio, track.title);
                 stopOtherAudios(audio);
+                showMusicContainer(track);
             });
-
-            const downloadResponse = await fetch(`/download?id=${track.id}`);
-            const downloadData = await downloadResponse.json();
-            const source = document.createElement('source');
-            if (downloadData.status) {
-                source.src = downloadData.data.download;
-            } else {
-                source.src = track.preview;
-            }
-            source.type = 'audio/mpeg';
-            source.setAttribute('title', track.title);
-            audio.appendChild(source);
             trackInfoDiv.appendChild(audio);
 
             const downloadButton = document.createElement('button');
             downloadButton.className = 'download-btn';
             downloadButton.textContent = 'Download';
-            downloadButton.onclick = () => {
+            downloadButton.onclick = async () => {
+                const downloadResponse = await fetch(`/download?id=${track.id}`);
+                const downloadData = await downloadResponse.json();
                 if (downloadData.status) {
                     window.location.href = downloadData.data.download;
                 } else {
@@ -89,109 +73,92 @@ document.getElementById('back-button').addEventListener('click', function() {
 
 document.getElementById('toggle-mode').addEventListener('click', function() {
     document.body.classList.toggle('night-mode');
-    const toggleButton = document.getElementById('toggle-mode');
-    toggleButton.textContent = document.body.classList.contains('night-mode') ? 'Light Mode' : 'Night Mode';
-
-    const searchInput = document.getElementById('search-query');
-    if (document.body.classList.contains('night-mode')) {
-        searchInput.classList.add('night-mode');
-    } else {
-        searchInput.classList.remove('night-mode');
-    }
 });
 
-document.getElementById('creator-button').addEventListener('click', function() {
-    window.location.href = 'https://zals.zalxzhu.my.id'; // Replace with your website URL
-});
+const musicContainer = document.getElementById('music-container');
+const mainAudio = document.getElementById('main-audio');
+let currentTrack = null;
 
-document.getElementById('close-music').addEventListener('click', function() {
-    hideMusicContainer();
-});
-
-document.getElementById('prev-button').addEventListener('click', function() {
-    playPreviousTrack();
-});
-
-document.getElementById('next-button').addEventListener('click', function() {
-    playNextTrack();
-});
-
-document.getElementById('autoplay-button').addEventListener('click', function() {
-    isAutoplay = !isAutoplay;
-    this.textContent = isAutoplay ? 'Autoplay On' : 'Autoplay Off';
-});
-
-document.getElementById('play-pause-button').addEventListener('click', function() {
-    const mainAudio = document.getElementById('main-audio');
-    if (mainAudio.paused) {
-        mainAudio.play();
-        this.textContent = 'Pause';
-    } else {
-        mainAudio.pause();
-        this.textContent = 'Play';
-    }
-});
-
-function showMusicContainer(audio, title) {
-    const musicContainer = document.getElementById('music-container');
-    const mainAudio = document.getElementById('main-audio');
-    const trackTitle = document.getElementById('current-track-title');
-
-    trackTitle.textContent = title;
-    syncAudioTime(audio, mainAudio);
+function showMusicContainer(track) {
+    currentTrack = track;
     musicContainer.style.display = 'block';
-
-    mainAudio.addEventListener('ended', function() {
-        if (isAutoplay) {
-            playNextTrack();
-        }
-    });
-}
-
-function hideMusicContainer() {
-    const musicContainer = document.getElementById('music-container');
-    const mainAudio = document.getElementById('main-audio');
-    mainAudio.pause();
-    musicContainer.style.display = 'none';
-}
-
-function playPreviousTrack() {
-    if (currentTrackIndex > 0) {
-        currentTrackIndex--;
-        playTrack();
-    }
-}
-
-function playNextTrack() {
-    if (currentTrackIndex < tracks.length - 1) {
-        currentTrackIndex++;
-        playTrack();
-    }
-}
-
-function playTrack() {
-    const track = tracks[currentTrackIndex];
-    const mainAudio = document.getElementById('main-audio');
-    const trackTitle = document.getElementById('current-track-title');
-
-    const audioSrc = track.preview; // Use full track URL if available
-    trackTitle.textContent = track.title;
-    mainAudio.src = audioSrc;
+    document.getElementById('current-track-title').textContent = track.title;
+    mainAudio.src = track.url; // Use full track URL if available
+    mainAudio.currentTime = 0;
     mainAudio.play();
 }
 
-function syncAudioTime(sourceAudio, targetAudio) {
-    targetAudio.currentTime = sourceAudio.currentTime;
-    sourceAudio.addEventListener('timeupdate', () => {
-        targetAudio.currentTime = sourceAudio.currentTime;
-    });
-}
+document.getElementById('close-music').addEventListener('click', function() {
+    musicContainer.style.display = 'none';
+    mainAudio.pause();
+    mainAudio.src = '';
+    currentTrack = null;
+});
 
 function stopOtherAudios(currentAudio) {
     const audios = document.querySelectorAll('audio');
     audios.forEach(audio => {
         if (audio !== currentAudio) {
             audio.pause();
+            audio.currentTime = 0;
         }
     });
 }
+
+const playPauseButton = document.getElementById('play-pause-button');
+playPauseButton.addEventListener('click', function() {
+    if (mainAudio.paused) {
+        mainAudio.play();
+        playPauseButton.textContent = 'Pause';
+    } else {
+        mainAudio.pause();
+        playPauseButton.textContent = 'Play';
+    }
+});
+
+mainAudio.addEventListener('play', function() {
+    playPauseButton.textContent = 'Pause';
+});
+
+mainAudio.addEventListener('pause', function() {
+    playPauseButton.textContent = 'Play';
+});
+
+// Autoplay
+let autoplay = false;
+const autoplayButton = document.getElementById('autoplay-button');
+autoplayButton.addEventListener('click', function() {
+    autoplay = !autoplay;
+    autoplayButton.textContent = autoplay ? 'Autoplay On' : 'Autoplay Off';
+});
+
+mainAudio.addEventListener('ended', function() {
+    if (autoplay) {
+        playNextTrack();
+    }
+});
+
+function playNextTrack() {
+    const tracks = document.querySelectorAll('.track-info audio');
+    const currentIndex = Array.from(tracks).findIndex(audio => audio.src === mainAudio.src);
+    if (currentIndex >= 0 && currentIndex < tracks.length - 1) {
+        tracks[currentIndex + 1].play();
+        showMusicContainer(currentTrack);
+    }
+}
+
+const prevButton = document.getElementById('prev-button');
+const nextButton = document.getElementById('next-button');
+
+prevButton.addEventListener('click', function() {
+    const tracks = document.querySelectorAll('.track-info audio');
+    const currentIndex = Array.from(tracks).findIndex(audio => audio.src === mainAudio.src);
+    if (currentIndex > 0) {
+        tracks[currentIndex - 1].play();
+        showMusicContainer(currentTrack);
+    }
+});
+
+nextButton.addEventListener('click', function() {
+    playNextTrack();
+});
