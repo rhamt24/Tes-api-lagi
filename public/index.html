@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streaming Spotify</title>
+    <title>Spotify Streaming and Downloader</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Spotify Streaming and Downloader</h1>
+        <h1>Spotify Downloader</h1>
         <button id="toggle-mode" class="button green">Night Mode</button>
         <form id="search-form">
             <input type="text" id="search-query" placeholder="Enter song title" required>
@@ -18,6 +18,7 @@
         <div id="results"></div>
         <div id="music-container">
             <button id="close-music" class="button red">X</button>
+            <div id="home-track"></div>
             <audio controls id="main-audio"></audio>
         </div>
         <div class="footer" id="home-footer">
@@ -27,7 +28,7 @@
         </div>
     </div>
     <div class="footer" id="footer-text">
-        <p>&copy; 2024 Zals . All rights reserved.</p>
+        <p>&copy; 2024 Zals. All rights reserved.</p>
     </div>
     <script src="script.js"></script>
 </body>
