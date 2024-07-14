@@ -115,8 +115,10 @@ document.getElementById('play-pause').addEventListener('click', function() {
     const mainAudio = document.getElementById('main-audio');
     if (mainAudio.paused) {
         mainAudio.play();
+        document.getElementById('play-pause').textContent = 'Pause';
     } else {
         mainAudio.pause();
+        document.getElementById('play-pause').textContent = 'Play';
     }
 });
 
@@ -139,6 +141,7 @@ function showMusicContainer(audioSrc, title, track) {
     document.getElementById('current-track-title').textContent = title;
     musicContainer.style.display = 'block';
     mainAudio.play();
+    document.getElementById('play-pause').textContent = 'Pause';
 
     mainAudio.addEventListener('ended', function() {
         if (autoPlay && currentTrackIndex < tracks.length - 1) {
