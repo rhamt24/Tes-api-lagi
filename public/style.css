@@ -89,6 +89,7 @@ button:active {
     background-color: #d0e6f5;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    text-align: center;
 }
 
 body.night-mode #music-container {
@@ -99,6 +100,24 @@ body.night-mode #music-container {
     position: absolute;
     top: 10px;
     right: 10px;
+}
+
+#current-track-title {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #000;
+}
+
+body.night-mode #current-track-title {
+    color: #fff;
+}
+
+#control-buttons {
+    margin-top: 10px;
+}
+
+#control-buttons button {
+    margin: 0 5px;
 }
 
 .track {
