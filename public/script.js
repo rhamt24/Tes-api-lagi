@@ -172,6 +172,8 @@ function stopOtherAudios(currentAudio) {
 
 function playCurrentTrack() {
     const track = tracks[currentTrackIndex];
-    const audioSrc = track.download || track.preview;
-    showMusicContainer(currentTrackIndex, audioSrc, track.title);
+    fetch(`/download?id=${track.id}`).then(response => response.json()).then(downloadData => {
+        const audioSrc = downloadData.status ? downloadData.data.download : track.preview;
+        showMusicContainer(currentTrackIndex, audioSrc, track.title);
+    });
 }
