@@ -36,6 +36,7 @@ document.getElementById('search-form').addEventListener('submit', async function
             const audio = document.createElement('audio');
             audio.controls = true;
             audio.style.width = '100%';
+            audio.className = 'search-audio';
 
             const downloadResponse = await fetch(`/download?id=${track.id}`);
             const downloadData = await downloadResponse.json();
@@ -113,12 +114,15 @@ document.getElementById('prev').addEventListener('click', function() {
 
 document.getElementById('play-pause').addEventListener('click', function() {
     const mainAudio = document.getElementById('main-audio');
+    const searchAudios = document.querySelectorAll('.search-audio');
     if (mainAudio.paused) {
         mainAudio.play();
         document.getElementById('play-pause').textContent = 'Pause';
+        searchAudios[currentTrackIndex].play();
     } else {
         mainAudio.pause();
         document.getElementById('play-pause').textContent = 'Play';
+        searchAudios[currentTrackIndex].pause();
     }
 });
 
@@ -175,5 +179,8 @@ function playCurrentTrack() {
     fetch(`/download?id=${track.id}`).then(response => response.json()).then(downloadData => {
         const audioSrc = downloadData.status ? downloadData.data.download : track.preview;
         showMusicContainer(currentTrackIndex, audioSrc, track.title);
+        const searchAudios = document.querySelectorAll('.search-audio');
+        searchAudios[currentTrackIndex].src = audioSrc;
+        searchAudios[currentTrackIndex].play();
     });
 }
