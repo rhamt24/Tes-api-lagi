@@ -14,7 +14,7 @@ document.getElementById('search-form').addEventListener('submit', async function
     if (data.status) {
         resultsDiv.innerHTML = '';
         tracks = data.data;
-        for (const track of tracks) {
+        for (const [index, track] of tracks.entries()) {
             const trackDiv = document.createElement('div');
             trackDiv.className = 'track';
 
@@ -47,7 +47,7 @@ document.getElementById('search-form').addEventListener('submit', async function
 
             audio.addEventListener('play', function() {
                 stopOtherAudios(audio);
-                showMusicContainer(source.src, track.title, track);
+                showMusicContainer(index, source.src, track.title);
             });
 
             trackInfoDiv.appendChild(audio);
@@ -134,7 +134,7 @@ document.getElementById('auto-play').addEventListener('click', function() {
     document.getElementById('auto-play').textContent = `Auto Play: ${autoPlay ? 'On' : 'Off'}`;
 });
 
-function showMusicContainer(audioSrc, title, track) {
+function showMusicContainer(index, audioSrc, title) {
     const musicContainer = document.getElementById('music-container');
     const mainAudio = document.getElementById('main-audio');
     mainAudio.src = audioSrc;
@@ -150,7 +150,7 @@ function showMusicContainer(audioSrc, title, track) {
         }
     });
 
-    currentTrackIndex = tracks.indexOf(track);
+    currentTrackIndex = index;
 }
 
 function hideMusicContainer() {
@@ -173,5 +173,5 @@ function stopOtherAudios(currentAudio) {
 function playCurrentTrack() {
     const track = tracks[currentTrackIndex];
     const audioSrc = track.download || track.preview;
-    showMusicContainer(audioSrc, track.title, track);
+    showMusicContainer(currentTrackIndex, audioSrc, track.title);
 }
