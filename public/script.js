@@ -76,7 +76,7 @@ document.getElementById('toggle-mode').addEventListener('click', function() {
 });
 
 document.getElementById('creator-button').addEventListener('click', function() {
-    alert('Creator: Your Name');
+    window.location.href = 'https://zals.zalxzhu.my.id';
 });
 
 const musicContainer = document.getElementById('music-container');
