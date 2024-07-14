@@ -141,11 +141,23 @@ document.getElementById('auto-play').addEventListener('click', function() {
 function showMusicContainer(index, audioSrc, title) {
     const musicContainer = document.getElementById('music-container');
     const mainAudio = document.getElementById('main-audio');
+    const searchAudios = document.querySelectorAll('.search-audio');
+
+    stopOtherAudios(mainAudio);
+
     mainAudio.src = audioSrc;
     document.getElementById('current-track-title').textContent = title;
     musicContainer.style.display = 'block';
     mainAudio.play();
     document.getElementById('play-pause').textContent = 'Pause';
+
+    mainAudio.addEventListener('play', function() {
+        searchAudios[currentTrackIndex].play();
+    });
+
+    mainAudio.addEventListener('pause', function() {
+        searchAudios[currentTrackIndex].pause();
+    });
 
     mainAudio.addEventListener('ended', function() {
         if (autoPlay && currentTrackIndex < tracks.length - 1) {
