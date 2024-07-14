@@ -41,7 +41,7 @@ document.getElementById('search-form').addEventListener('submit', async function
                 source.setAttribute('title', track.title);
                 audio.appendChild(source);
                 audio.addEventListener('play', function() {
-                    showMusicContainer(downloadData.data.download);
+                    showMusicContainer(track, downloadData.data.download);
                 });
             } else {
                 const source = document.createElement('source');
@@ -50,7 +50,7 @@ document.getElementById('search-form').addEventListener('submit', async function
                 source.setAttribute('title', track.title);
                 audio.appendChild(source);
                 audio.addEventListener('play', function() {
-                    showMusicContainer(track.preview);
+                    showMusicContainer(track, track.preview);
                 });
             }
             trackInfoDiv.appendChild(audio);
@@ -107,10 +107,24 @@ document.getElementById('close-music').addEventListener('click', function() {
     hideMusicContainer();
 });
 
-function showMusicContainer(audioSrc) {
+function showMusicContainer(track, audioSrc) {
     const musicContainer = document.getElementById('music-container');
     const mainAudio = document.getElementById('main-audio');
+    const homeTrack = document.getElementById('home-track');
+
     mainAudio.src = audioSrc;
+    homeTrack.innerHTML = `
+        <div class="track">
+            <img src="${track.thumbnail}" alt="Thumbnail">
+            <div class="track-info">
+                <h3>${track.title}</h3>
+                <p>Duration: ${track.duration}</p>
+                <audio controls>
+                    <source src="${audioSrc}" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+    `;
     musicContainer.style.display = 'block';
 }
 
