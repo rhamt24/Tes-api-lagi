@@ -31,19 +31,26 @@ document.getElementById('search-form').addEventListener('submit', async function
             const audio = document.createElement('audio');
             audio.controls = true;
             audio.style.width = '100%';
-            audio.src = track.url; // Gunakan URL lagu penuh di sini
+
+            const downloadResponse = await fetch(`/download?id=${track.id}`);
+            const downloadData = await downloadResponse.json();
+            const source = document.createElement('source');
+            source.src = downloadData.status ? downloadData.data.download : track.preview;
+            source.type = 'audio/mpeg';
+            source.setAttribute('title', track.title);
+            audio.appendChild(source);
+
             audio.addEventListener('play', function() {
                 stopOtherAudios(audio);
-                showMusicContainer(track);
+                showMusicContainer(source.src, track.title);
             });
+
             trackInfoDiv.appendChild(audio);
 
             const downloadButton = document.createElement('button');
             downloadButton.className = 'download-btn';
             downloadButton.textContent = 'Download';
-            downloadButton.onclick = async () => {
-                const downloadResponse = await fetch(`/download?id=${track.id}`);
-                const downloadData = await downloadResponse.json();
+            downloadButton.onclick = () => {
                 if (downloadData.status) {
                     window.location.href = downloadData.data.download;
                 } else {
@@ -73,31 +80,40 @@ document.getElementById('back-button').addEventListener('click', function() {
 
 document.getElementById('toggle-mode').addEventListener('click', function() {
     document.body.classList.toggle('night-mode');
+    const toggleButton = document.getElementById('toggle-mode');
+    toggleButton.textContent = document.body.classList.contains('night-mode') ? 'Light Mode' : 'Night Mode';
+
+    const searchInput = document.getElementById('search-query');
+    if (document.body.classList.contains('night-mode')) {
+        searchInput.classList.add('night-mode');
+    } else {
+        searchInput.classList.remove('night-mode');
+    }
 });
 
 document.getElementById('creator-button').addEventListener('click', function() {
     window.location.href = 'https://zals.zalxzhu.my.id';
 });
 
-const musicContainer = document.getElementById('music-container');
-const mainAudio = document.getElementById('main-audio');
-let currentTrack = null;
+document.getElementById('close-music').addEventListener('click', function() {
+    hideMusicContainer();
+});
 
-function showMusicContainer(track) {
-    currentTrack = track;
+function showMusicContainer(audioSrc, title) {
+    const musicContainer = document.getElementById('music-container');
+    const mainAudio = document.getElementById('main-audio');
+    mainAudio.src = audioSrc;
+    document.getElementById('current-track-title').textContent = title;
     musicContainer.style.display = 'block';
-    document.getElementById('current-track-title').textContent = track.title;
-    mainAudio.src = track.url; // Gunakan URL lagu penuh di sini
-    mainAudio.currentTime = 0;
     mainAudio.play();
 }
 
-document.getElementById('close-music').addEventListener('click', function() {
-    musicContainer.style.display = 'none';
+function hideMusicContainer() {
+    const musicContainer = document.getElementById('music-container');
+    const mainAudio = document.getElementById('main-audio');
     mainAudio.pause();
-    mainAudio.src = '';
-    currentTrack = null;
-});
+    musicContainer.style.display = 'none';
+}
 
 function stopOtherAudios(currentAudio) {
     const audios = document.querySelectorAll('audio');
@@ -108,67 +124,3 @@ function stopOtherAudios(currentAudio) {
         }
     });
 }
-
-const playPauseButton = document.getElementById('play-pause-button');
-playPauseButton.addEventListener('click', function() {
-    if (mainAudio.paused) {
-        mainAudio.play();
-        playPauseButton.textContent = 'Pause';
-    } else {
-        mainAudio.pause();
-        playPauseButton.textContent = 'Play';
-    }
-});
-
-mainAudio.addEventListener('play', function() {
-    playPauseButton.textContent = 'Pause';
-});
-
-mainAudio.addEventListener('pause', function() {
-    playPauseButton.textContent = 'Play';
-});
-
-// Autoplay
-let autoplay = false;
-const autoplayButton = document.getElementById('autoplay-button');
-autoplayButton.addEventListener('click', function() {
-    autoplay = !autoplay;
-    autoplayButton.textContent = autoplay ? 'Autoplay On' : 'Autoplay Off';
-});
-
-mainAudio.addEventListener('ended', function() {
-    if (autoplay) {
-        playNextTrack();
-    }
-});
-
-function playNextTrack() {
-    const tracks = document.querySelectorAll('.track-info audio');
-    const currentIndex = Array.from(tracks).findIndex(audio => audio.src === mainAudio.src);
-    if (currentIndex >= 0 && currentIndex < tracks.length - 1) {
-        tracks[currentIndex + 1].play();
-        showMusicContainer({
-            title: tracks[currentIndex + 1].closest('.track-info').querySelector('h3').textContent,
-            url: tracks[currentIndex + 1].src
-        });
-    }
-}
-
-const prevButton = document.getElementById('prev-button');
-const nextButton = document.getElementById('next-button');
-
-prevButton.addEventListener('click', function() {
-    const tracks = document.querySelectorAll('.track-info audio');
-    const currentIndex = Array.from(tracks).findIndex(audio => audio.src === mainAudio.src);
-    if (currentIndex > 0) {
-        tracks[currentIndex - 1].play();
-        showMusicContainer({
-            title: tracks[currentIndex - 1].closest('.track-info').querySelector('h3').textContent,
-            url: tracks[currentIndex - 1].src
-        });
-    }
-});
-
-nextButton.addEventListener('click', function() {
-    playNextTrack();
-});
