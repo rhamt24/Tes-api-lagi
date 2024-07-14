@@ -31,7 +31,7 @@ document.getElementById('search-form').addEventListener('submit', async function
             const audio = document.createElement('audio');
             audio.controls = true;
             audio.style.width = '100%';
-            audio.src = track.preview; // Use full track URL if available
+            audio.src = track.url; // Use full track URL if available
             audio.addEventListener('play', function() {
                 stopOtherAudios(audio);
                 showMusicContainer(track);
@@ -73,6 +73,10 @@ document.getElementById('back-button').addEventListener('click', function() {
 
 document.getElementById('toggle-mode').addEventListener('click', function() {
     document.body.classList.toggle('night-mode');
+});
+
+document.getElementById('creator-button').addEventListener('click', function() {
+    alert('Creator: Your Name');
 });
 
 const musicContainer = document.getElementById('music-container');
@@ -143,7 +147,10 @@ function playNextTrack() {
     const currentIndex = Array.from(tracks).findIndex(audio => audio.src === mainAudio.src);
     if (currentIndex >= 0 && currentIndex < tracks.length - 1) {
         tracks[currentIndex + 1].play();
-        showMusicContainer(currentTrack);
+        showMusicContainer({
+            title: tracks[currentIndex + 1].closest('.track-info').querySelector('h3').textContent,
+            url: tracks[currentIndex + 1].src
+        });
     }
 }
 
@@ -155,7 +162,10 @@ prevButton.addEventListener('click', function() {
     const currentIndex = Array.from(tracks).findIndex(audio => audio.src === mainAudio.src);
     if (currentIndex > 0) {
         tracks[currentIndex - 1].play();
-        showMusicContainer(currentTrack);
+        showMusicContainer({
+            title: tracks[currentIndex - 1].closest('.track-info').querySelector('h3').textContent,
+            url: tracks[currentIndex - 1].src
+        });
     }
 });
 
