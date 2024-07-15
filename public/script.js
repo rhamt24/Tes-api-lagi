@@ -114,15 +114,12 @@ document.getElementById('prev').addEventListener('click', function() {
 
 document.getElementById('play-pause').addEventListener('click', function() {
     const mainAudio = document.getElementById('main-audio');
-    const searchAudios = document.querySelectorAll('.search-audio');
     if (mainAudio.paused) {
         mainAudio.play();
         document.getElementById('play-pause').textContent = 'Pause';
-        searchAudios[currentTrackIndex].play();
     } else {
         mainAudio.pause();
         document.getElementById('play-pause').textContent = 'Play';
-        searchAudios[currentTrackIndex].pause();
     }
 });
 
@@ -141,11 +138,28 @@ document.getElementById('auto-play').addEventListener('click', function() {
 function showMusicContainer(index, audioSrc, title) {
     const musicContainer = document.getElementById('music-container');
     const mainAudio = document.getElementById('main-audio');
+    const searchAudios = document.querySelectorAll('.search-audio');
+
+    stopOtherAudios(mainAudio);
+
     mainAudio.src = audioSrc;
     document.getElementById('current-track-title').textContent = title;
     musicContainer.style.display = 'block';
     mainAudio.play();
     document.getElementById('play-pause').textContent = 'Pause';
+
+    mainAudio.addEventListener('play', function() {
+        searchAudios.forEach(audio => {
+            audio.currentTime = mainAudio.currentTime;
+            audio.pause();
+        });
+    });
+
+    mainAudio.addEventListener('pause', function() {
+        searchAudios.forEach(audio => {
+            audio.pause();
+        });
+    });
 
     mainAudio.addEventListener('ended', function() {
         if (autoPlay && currentTrackIndex < tracks.length - 1) {
@@ -179,8 +193,5 @@ function playCurrentTrack() {
     fetch(`/download?id=${track.id}`).then(response => response.json()).then(downloadData => {
         const audioSrc = downloadData.status ? downloadData.data.download : track.preview;
         showMusicContainer(currentTrackIndex, audioSrc, track.title);
-        const searchAudios = document.querySelectorAll('.search-audio');
-        searchAudios[currentTrackIndex].src = audioSrc;
-        searchAudios[currentTrackIndex].play();
     });
 }
