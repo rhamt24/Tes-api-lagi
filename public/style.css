@@ -1,142 +1,150 @@
-/* Global Styling */
 body {
     font-family: Arial, sans-serif;
-    transition: background-color 0.3s, color 0.3s;
+    padding: 20px;
+    margin: 0;
+    background-image: url('https://cdn.jsdelivr.net/gh/rhamt24/rhamt.github.io/Images/bacground.jpg');
+    background-size: cover; /* Mengubah ukuran gambar agar menutupi seluruh layar */
+    background-position: center center; /* Mengatur posisi gambar di tengah */
+    background-repeat: no-repeat; /* Mengatur agar gambar tidak diulang */
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.night-mode {
+body.night-mode {
     background-color: #121212;
-    color: #ffffff;
+    color: #fff;
 }
 
 .container {
-    width: 80%;
-    margin: 0 auto;
-    text-align: center;
-    padding-top: 50px;
-}
-
-/* Toggle Button Styling */
-#toggle-container {
-    position: relative;
-    width: 60px;
-    height: 30px;
-    display: inline-block;
-    cursor: pointer;
-}
-
-#toggle-slider {
-    position: relative;
-    width: 60px;
-    height: 30px;
-    background-color: #ccc;
-    border-radius: 30px;
-    transition: background-color 0.3s;
-}
-
-#toggle-slider::before {
-    content: '';
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    background-color: #fff;
-    border-radius: 50%;
-    transition: transform 0.3s;
-}
-
-#toggle-icon {
-    width: 20px;
-    height: 20px;
-}
-
-.night-mode #toggle-slider {
-    background-color: #333;
-}
-
-.night-mode #toggle-slider::before {
-    transform: translateX(30px);
-}
-
-#toggle-container #toggle-icon {
-    display: block;
-    margin: 5px auto;
-}
-
-/* Search Form Styling */
-#search-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#search-query {
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-}
-
-#search-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-#search-button img {
-    width: 24px;
-    height: 24px;
-}
-
-/* Results and Music Container Styling */
-#results {
-    margin-top: 20px;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
 }
 
 .track {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
 }
 
 .track img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    margin-right: 20px;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
 }
 
 .track-info {
-    text-align: left;
+    flex: 1;
 }
 
-.download-btn {
+.track-info h3 {
+    margin: 0 0 5px;
+}
+
+.track-info p {
+    margin: 5px 0;
+}
+
+.button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.button.green {
     background-color: #4CAF50;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
 }
 
-.download-btn:hover {
-    background-color: #45a049;
-}
-
-#music-container {
-    margin-top: 20px;
-    border: 2px solid #ccc;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
-
-#current-track-title {
-    margin: 10px 0;
+.button.blue {
+    background-color: #008CBA;
+    color: white;
 }
 
 .button.red {
     background-color: #f44336;
+    color: white;
 }
 
-.button.red:hover {
-    background-color: #e53935;
+.download-btn {
+    background-color: #FF9800;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
+
+#search-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#search-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#results {
+    margin-top: 20px;
+}
+
+.night-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+#music-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    text-align: center;
+    z-index: 1000;
+}
+
+#controls {
+    margin-top: 10px;
+}
+
+.footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+#footer-text {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+/* Penyesuaian untuk tampilan mobile */
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 90%; /* Mengurangi lebar kontainer agar muat di layar kecil */
+        padding: 15px; /* Mengurangi padding untuk mengoptimalkan ruang */
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    body {
+        background-size: contain; /* Menyesuaikan ukuran latar belakang untuk perangkat mobile */
+    }
+    }
