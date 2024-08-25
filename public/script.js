@@ -84,18 +84,10 @@ document.getElementById('back-button').addEventListener('click', function() {
     document.getElementById('home-footer').style.display = 'block';
 });
 
-document.getElementById('toggle-container').addEventListener('click', function() {
+document.getElementById('toggle-mode').addEventListener('click', function() {
     document.body.classList.toggle('night-mode');
-    const toggleSlider = document.getElementById('toggle-slider');
-    const toggleIcon = document.getElementById('toggle-icon');
-
-    if (document.body.classList.contains('night-mode')) {
-        toggleSlider.style.left = '30px';
-        toggleIcon.src = 'assets/night.png';
-    } else {
-        toggleSlider.style.left = '0';
-        toggleIcon.src = 'assets/day.png';
-    }
+    const toggleButton = document.getElementById('toggle-mode');
+    toggleButton.textContent = document.body.classList.contains('night-mode') ? 'Light Mode' : 'Night Mode';
 
     const searchInput = document.getElementById('search-query');
     if (document.body.classList.contains('night-mode')) {
@@ -203,3 +195,4 @@ function playCurrentTrack() {
         showMusicContainer(currentTrackIndex, audioSrc, track.title);
     });
             }
+                                                   
