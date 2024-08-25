@@ -1,6 +1,4 @@
-let currentTrackIndex = -1;
-let tracks = [];
-let autoPlay = false;
+// Fungsi night mode dan light mode serta tombolnya telah dihapus
 
 document.getElementById('search-form').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -82,19 +80,6 @@ document.getElementById('back-button').addEventListener('click', function() {
     document.getElementById('back-button').style.display = 'none';
     document.getElementById('results').innerHTML = '';
     document.getElementById('home-footer').style.display = 'block';
-});
-
-document.getElementById('toggle-mode').addEventListener('click', function() {
-    document.body.classList.toggle('night-mode');
-    const toggleButton = document.getElementById('toggle-mode');
-    toggleButton.textContent = document.body.classList.contains('night-mode') ? 'Light Mode' : 'Night Mode';
-
-    const searchInput = document.getElementById('search-query');
-    if (document.body.classList.contains('night-mode')) {
-        searchInput.classList.add('night-mode');
-    } else {
-        searchInput.classList.remove('night-mode');
-    }
 });
 
 document.getElementById('creator-button').addEventListener('click', function() {
@@ -195,4 +180,4 @@ function playCurrentTrack() {
         showMusicContainer(currentTrackIndex, audioSrc, track.title);
     });
             }
-                                                   
+            
