@@ -88,13 +88,24 @@ document.getElementById('creator-button').addEventListener('click', function() {
 
 document.getElementById('hide-music').addEventListener('click', function() {
     const musicContainer = document.getElementById('music-container');
+    const showButton = document.getElementById('show-music');
     musicContainer.style.display = 'none';
+    showButton.style.display = 'block';
+});
+
+document.getElementById('show-music').addEventListener('click', function() {
+    const musicContainer = document.getElementById('music-container');
+    const showButton = document.getElementById('show-music');
+    musicContainer.style.display = 'block';
+    showButton.style.display = 'none';
 });
 
 document.getElementById('close-music').addEventListener('click', function() {
     const musicContainer = document.getElementById('music-container');
-    musicContainer.style.display = 'none';
     const mainAudio = document.getElementById('main-audio');
+    const showButton = document.getElementById('show-music');
+    musicContainer.style.display = 'none';
+    showButton.style.display = 'none';
     mainAudio.pause();
 });
 
@@ -180,5 +191,4 @@ function playCurrentTrack() {
         const audioSrc = downloadData.status ? downloadData.data.download : track.preview;
         showMusicContainer(currentTrackIndex, audioSrc, track.title);
     });
-}
-    
+                                               }
