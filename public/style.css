@@ -7,19 +7,13 @@ body {
     background-position: center center; /* Mengatur posisi gambar di tengah */
     background-repeat: no-repeat; /* Mengatur agar gambar tidak diulang */
     color: #333;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.night-mode {
-    background-color: #121212;
-    color: #fff;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: auto;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.7); /* Lebih transparan */
     border-radius: 10px;
 }
 
@@ -28,7 +22,7 @@ body.night-mode {
     align-items: center;
     padding: 10px;
     margin: 10px 0;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(200, 200, 200, 0.9); /* Abu-abu untuk kontainer bar musik */
     border-radius: 5px;
 }
 
@@ -103,17 +97,12 @@ body.night-mode {
     margin-top: 20px;
 }
 
-.night-mode {
-    background-color: #121212;
-    color: #fff;
-}
-
 #music-container {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(50, 50, 50, 0.9); /* Abu-abu untuk kontainer bar musik */
     padding: 20px;
     text-align: center;
     z-index: 1000;
@@ -139,12 +128,12 @@ body.night-mode {
 /* Penyesuaian untuk tampilan mobile */
 @media only screen and (max-width: 600px) {
     .container {
-        width: 90%; /* Mengurangi lebar kontainer agar muat di layar kecil */
-        padding: 15px; /* Mengurangi padding untuk mengoptimalkan ruang */
-        background-color: rgba(255, 255, 255, 0.9);
+        width: 90%;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.8);
     }
 
     body {
-        background-size: contain; /* Menyesuaikan ukuran latar belakang untuk perangkat mobile */
+        background-size: cover; /* Tetap menutupi seluruh layar pada perangkat mobile */
     }
-    }
+}
