@@ -68,7 +68,7 @@ document.getElementById('search-form').addEventListener('submit', async function
         }
 
         document.getElementById('back-button').style.display = 'block';
-        document.getElementById('search-form').style.display = 'none';
+        document.getElementById('search-form').style.display = 'flex';
         document.getElementById('home-footer').style.display = 'none';
     } else {
         resultsDiv.textContent = 'No tracks found!';
@@ -86,8 +86,16 @@ document.getElementById('creator-button').addEventListener('click', function() {
     window.location.href = 'https://zals.zalxzhu.my.id';
 });
 
+document.getElementById('hide-music').addEventListener('click', function() {
+    const musicContainer = document.getElementById('music-container');
+    musicContainer.style.display = 'none';
+});
+
 document.getElementById('close-music').addEventListener('click', function() {
-    hideMusicContainer();
+    const musicContainer = document.getElementById('music-container');
+    musicContainer.style.display = 'none';
+    const mainAudio = document.getElementById('main-audio');
+    mainAudio.pause();
 });
 
 document.getElementById('prev').addEventListener('click', function() {
@@ -156,13 +164,6 @@ function showMusicContainer(index, audioSrc, title) {
     currentTrackIndex = index;
 }
 
-function hideMusicContainer() {
-    const musicContainer = document.getElementById('music-container');
-    const mainAudio = document.getElementById('main-audio');
-    mainAudio.pause();
-    musicContainer.style.display = 'none';
-}
-
 function stopOtherAudios(currentAudio) {
     const audios = document.querySelectorAll('audio');
     audios.forEach(audio => {
@@ -179,5 +180,5 @@ function playCurrentTrack() {
         const audioSrc = downloadData.status ? downloadData.data.download : track.preview;
         showMusicContainer(currentTrackIndex, audioSrc, track.title);
     });
-            }
-            
+}
+    
