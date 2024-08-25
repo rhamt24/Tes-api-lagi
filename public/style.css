@@ -3,15 +3,15 @@ body {
     padding: 20px;
     margin: 0;
     background-image: url('https://cdn.jsdelivr.net/gh/rhamt24/rhamt.github.io/Images/bacground.jpg');
-    background-size: cover; /* Mengubah ukuran gambar agar menutupi seluruh layar */
+    background-size: 100% 100%; /* Mengubah ukuran gambar agar sesuai rasio layar */
     background-position: center center; /* Mengatur posisi gambar di tengah */
-    background-repeat: no-repeat; /* Mengatur agar gambar tidak diulang */
-    color: #333;
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
 
 .container {
     max-width: 800px;
-    margin: auto;
+    margin: 0 auto;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.7); /* Lebih transparan */
     border-radius: 10px;
@@ -68,6 +68,17 @@ body {
     color: white;
 }
 
+.button.gray {
+    background-color: #666;
+    color: white;
+}
+
+.button.red.top-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
 .download-btn {
     background-color: #FF9800;
     color: white;
@@ -106,6 +117,10 @@ body {
     padding: 20px;
     text-align: center;
     z-index: 1000;
+}
+
+#current-track-title {
+    color: white; /* Teks judul berwarna putih */
 }
 
 #controls {
