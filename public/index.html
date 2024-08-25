@@ -3,40 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZALXZHU MUSIC</title>
+    <title>Music Player</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Spotify Streaming and Downloader Beta Access</h1>
+    <div class="background"></div>
+
+    <div id="search-container">
         <form id="search-form">
-            <input type="text" id="search-query" placeholder="Enter song title" required>
-            <button type="submit" class="button green">Search</button>
+            <input type="text" id="search-query" placeholder="Search for music...">
+            <button type="submit">Search</button>
         </form>
-        <button id="back-button" class="button blue" style="display:none;">Back to Search</button>
-        <div id="results"></div>
-        <div id="music-container" style="display:none;">
-            <button id="hide-music" class="button gray">Hide</button>
-            <h3 id="current-track-title"></h3>
-            <audio controls id="main-audio"></audio>
-            <div id="controls">
-                <button id="prev" class="button blue">Prev</button>
-                <button id="play-pause" class="button blue">Play</button>
-                <button id="next" class="button blue">Next</button>
-                <button id="auto-play" class="button blue">Auto Play: Off</button>
+    </div>
+
+    <div id="results"></div>
+    
+    <div id="music-container" class="music-container">
+        <button id="hide-music">Hide</button>
+        <button id="close-music">X</button>
+        <div class="music-bar">
+            <div id="current-track-title" class="track-title">Track Title</div>
+            <audio id="main-audio" controls></audio>
+            <div class="controls">
+                <button id="prev">Previous</button>
+                <button id="play-pause">Play</button>
+                <button id="next">Next</button>
+                <button id="auto-play">Auto Play: Off</button>
             </div>
-            <button id="close-music" class="button red top-right">X</button>
-        </div>
-        <button id="show-music" class="button gray small-button" style="display:none;">Show Music Player</button>
-        <div class="footer" id="home-footer">
-            <p style="color: white;">About: This web app allows you to search and download Spotify tracks easily. If the music cannot be played or downloaded, the page is reloaded. If you find a bug or want to donate, press the Creator button.</p>
-            <p style="color: white;">Purpose: To provide an easy way to download and listen to Spotify music.</p>
-            <button id="creator-button" class="button green">Creator</button>
         </div>
     </div>
-    <div class="footer" id="footer-text">
-        <p>&copy; 2024 Zals. All rights reserved.</p>
-    </div>
+
+    <button id="show-music" style="display: none;">Show Music</button>
+
     <script src="script.js"></script>
 </body>
 </html>
