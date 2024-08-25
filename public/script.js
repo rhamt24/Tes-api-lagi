@@ -202,5 +202,4 @@ function playCurrentTrack() {
         const audioSrc = downloadData.status ? downloadData.data.download : track.preview;
         showMusicContainer(currentTrackIndex, audioSrc, track.title);
     });
-                }
-                            
+    }
