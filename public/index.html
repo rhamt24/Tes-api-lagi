@@ -8,24 +8,33 @@
 </head>
 <body>
     <div class="container">
-        <h1>Spotify Streaming and Downloader Beta Access</h1>
-        <div id="toggle-container">
-            <div id="toggle-slider">
-                <img id="toggle-icon" src="assets/day.png" alt="Mode Icon">
-            </div>
-        </div>
+        <h1>Spotify Streaming and Downloader Beta Acces</h1>
+        <button id="toggle-mode" class="button green">Night Mode</button>
         <form id="search-form">
             <input type="text" id="search-query" placeholder="Enter song title" required>
-            <button type="submit" id="search-button">
-                <img src="assets/search.png" alt="Search">
-            </button>
+            <button type="submit" class="button green">Search</button>
         </form>
+        <button id="back-button" class="button blue" style="display:none;">Back to Search</button>
         <div id="results"></div>
         <div id="music-container" style="display:none;">
             <button id="close-music" class="button red">X</button>
             <h3 id="current-track-title"></h3>
             <audio controls id="main-audio"></audio>
+            <div id="controls">
+                <button id="prev" class="button blue">Prev</button>
+                <button id="play-pause" class="button blue">Play</button>
+                <button id="next" class="button blue">Next</button>
+                <button id="auto-play" class="button blue">Auto Play: Off</button>
+            </div>
         </div>
+        <div class="footer" id="home-footer">
+            <p>About: This web app allows you to search and download Spotify tracks easily, If the music cannot be played or downloaded the page is reloaded, if you find a bug or want to donate press the Creator button.</p>
+            <p>Purpose: To provide an easy way to download and listen to Spotify music.</p>
+            <button id="creator-button" class="button green">Creator</button>
+        </div>
+    </div>
+    <div class="footer" id="footer-text">
+        <p>&copy; 2024 Zals. All rights reserved.</p>
     </div>
     <script src="script.js"></script>
 </body>
