@@ -3,7 +3,7 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: fixed; /* Menjaga background tetap di tempat */
     min-height: 100vh;
     margin: 0;
     padding: 0;
@@ -13,10 +13,10 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.7); /* Lebih transparan */
     border-radius: 10px;
     position: relative;
-    z-index: 1;
+    z-index: 1; /* Menempatkan kontainer di atas latar belakang */
 }
 
 .track {
@@ -24,7 +24,7 @@ body {
     align-items: center;
     padding: 10px;
     margin: 10px 0;
-    background-color: rgba(200, 200, 200, 0.9);
+    background-color: rgba(200, 200, 200, 0.9); /* Abu-abu untuk kontainer bar musik */
     border-radius: 5px;
 }
 
@@ -41,7 +41,7 @@ body {
 
 .track-info h3 {
     margin: 0 0 5px;
-    color: white;
+    color: white; /* Teks judul berwarna putih */
 }
 
 .track-info p {
@@ -125,14 +125,14 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(50, 50, 50, 0.9);
+    background-color: rgba(50, 50, 50, 0.9); /* Abu-abu untuk kontainer bar musik */
     padding: 20px;
     text-align: center;
     z-index: 1000;
 }
 
 #current-track-title {
-    color: white;
+    color: white; /* Teks judul berwarna putih */
 }
 
 #controls {
@@ -152,80 +152,27 @@ body {
     margin-top: 20px;
 }
 
-/* User Tab */
-.user-tab {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
+/* Penyesuaian untuk tampilan mobile */
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
 
-#user-info-btn {
-    background-color: #008CBA;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
+    .track {
+        flex-direction: column; /* Ubah arah kontainer hasil pencarian pada tampilan mobile */
+        text-align: center;
+    }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    z-index: 1;
-    border-radius: 5px;
-}
+    .track img {
+        margin-bottom: 10px;
+    }
 
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #ddd;
-}
-
-.user-tab:hover .dropdown-content {
-    display: block;
-}
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
-    border-radius: 10px;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+    .button.small-button {
+        bottom: 10px;
+        right: 10px;
+        width: auto;
+        padding: 5px 10px;
+    }
+    }
