@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="user-tab">
+        <button id="user-info-btn">User</button>
+        <div id="user-info" class="dropdown-content">
+            <a href="#" id="register">Register</a>
+            <a href="#" id="login">Login</a>
+            <a href="#" id="logout" style="display:none;">Logout</a>
+        </div>
+    </div>
+
     <div class="container">
         <h1>Spotify Streaming and Downloader Beta Access</h1>
         <form id="search-form">
@@ -25,6 +34,7 @@
                 <button id="next" class="button blue">Next</button>
                 <button id="auto-play" class="button blue">Auto Play: Off</button>
             </div>
+            <button id="add-to-favorites" class="button green">Add to Favorites</button>
             <button id="close-music" class="button red top-right">X</button>
         </div>
         <button id="show-music" class="button gray small-button" style="display:none;">Show Music Player</button>
@@ -37,6 +47,14 @@
     <div class="footer" id="footer-text">
         <p>&copy; 2024 Zals. All rights reserved.</p>
     </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
-                                                                             </html>
+    </html>
