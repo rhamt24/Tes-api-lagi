@@ -1,6 +1,11 @@
-// Fungsi night mode dan light mode serta tombolnya telah dihapus
+// Variables
+let tracks = [];
+let currentTrackIndex = 0;
+let autoPlay = false;
+let favoritePlaylist = [];
 
-document.getElementById('search-form').addEventListener('submit', async function(e) {
+// Search functionality
+document.getElementById('search-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     const query = document.getElementById('search-query').value;
     const resultsDiv = document.getElementById('results');
@@ -16,179 +21,124 @@ document.getElementById('search-form').addEventListener('submit', async function
             const trackDiv = document.createElement('div');
             trackDiv.className = 'track';
 
-            const thumbnail = document.createElement('img');
-            thumbnail.src = track.thumbnail;
-            trackDiv.appendChild(thumbnail);
-
             const trackInfoDiv = document.createElement('div');
             trackInfoDiv.className = 'track-info';
+            trackInfoDiv.innerHTML = `
+                <h3>${track.title}</h3>
+                <p>${track.artist}</p>
+            `;
 
-            const title = document.createElement('h3');
-            title.textContent = track.title;
-            trackInfoDiv.appendChild(title);
-
-            const duration = document.createElement('p');
-            duration.textContent = `Duration: ${track.duration}`;
-            trackInfoDiv.appendChild(duration);
-
-            const audio = document.createElement('audio');
-            audio.controls = true;
-            audio.style.width = '100%';
-            audio.className = 'search-audio';
-
-            const downloadResponse = await fetch(`/download?id=${track.id}`);
-            const downloadData = await downloadResponse.json();
-            const source = document.createElement('source');
-            source.src = downloadData.status ? downloadData.data.download : track.preview;
-            source.type = 'audio/mpeg';
-            source.setAttribute('title', track.title);
-            audio.appendChild(source);
-
-            audio.addEventListener('play', function() {
-                stopOtherAudios(audio);
-                showMusicContainer(index, source.src, track.title);
-            });
-
-            trackInfoDiv.appendChild(audio);
-
-            const downloadButton = document.createElement('button');
-            downloadButton.className = 'download-btn';
-            downloadButton.textContent = 'Download';
-            downloadButton.onclick = () => {
-                if (downloadData.status) {
-                    window.location.href = downloadData.data.download;
-                } else {
-                    alert('Failed to download track.');
-                }
-            };
-            trackInfoDiv.appendChild(downloadButton);
+            const favoriteButton = createFavoriteButton(track);
+            const playButton = document.createElement('button');
+            playButton.className = 'button green';
+            playButton.textContent = 'Play';
+            playButton.onclick = () => playTrack(index);
 
             trackDiv.appendChild(trackInfoDiv);
+            trackDiv.appendChild(favoriteButton);
+            trackDiv.appendChild(playButton);
+
             resultsDiv.appendChild(trackDiv);
         }
-
-        document.getElementById('back-button').style.display = 'block';
-        document.getElementById('search-form').style.display = 'flex';
-        document.getElementById('home-footer').style.display = 'none';
     } else {
-        resultsDiv.textContent = 'No tracks found!';
+        resultsDiv.innerHTML = 'No results found.';
     }
 });
 
-document.getElementById('back-button').addEventListener('click', function() {
-    document.getElementById('search-form').style.display = 'flex';
-    document.getElementById('back-button').style.display = 'none';
-    document.getElementById('results').innerHTML = '';
-    document.getElementById('home-footer').style.display = 'block';
-});
+function createFavoriteButton(track) {
+    const favoriteButton = document.createElement('button');
+    favoriteButton.className = 'button gray';
+    favoriteButton.textContent = 'Add to Favorites';
+    favoriteButton.onclick = () => addToFavorites(track);
+    return favoriteButton;
+}
 
-document.getElementById('creator-button').addEventListener('click', function() {
-    window.location.href = 'https://zals.zalxzhu.my.id';
-});
+function playTrack(index) {
+    currentTrackIndex = index;
+    const track = tracks[currentTrackIndex];
+    document.getElementById('current-track-title').textContent = `${track.title} - ${track.artist}`;
+    document.getElementById('main-audio').src = track.preview_url;
+    document.getElementById('main-audio').play();
+    document.getElementById('music-container').style.display = 'block';
+}
 
-document.getElementById('hide-music').addEventListener('click', function() {
-    const musicContainer = document.getElementById('music-container');
-    const showButton = document.getElementById('show-music');
-    musicContainer.style.display = 'none';
-    showButton.style.display = 'block';
-});
+document.getElementById('prev').onclick = () => {
+    if (currentTrackIndex > 0) playTrack(currentTrackIndex - 1);
+};
 
-document.getElementById('show-music').addEventListener('click', function() {
-    const musicContainer = document.getElementById('music-container');
-    const showButton = document.getElementById('show-music');
-    musicContainer.style.display = 'block';
-    showButton.style.display = 'none';
-});
+document.getElementById('next').onclick = () => {
+    if (currentTrackIndex < tracks.length - 1) playTrack(currentTrackIndex + 1);
+    if (autoPlay && currentTrackIndex >= tracks.length - 1) playTrack(0);
+};
 
-document.getElementById('close-music').addEventListener('click', function() {
-    const musicContainer = document.getElementById('music-container');
-    const mainAudio = document.getElementById('main-audio');
-    const showButton = document.getElementById('show-music');
-    musicContainer.style.display = 'none';
-    showButton.style.display = 'none';
-    mainAudio.pause();
-});
-
-document.getElementById('prev').addEventListener('click', function() {
-    if (currentTrackIndex > 0) {
-        currentTrackIndex--;
-        playCurrentTrack();
-    }
-});
-
-document.getElementById('play-pause').addEventListener('click', function() {
-    const mainAudio = document.getElementById('main-audio');
-    if (mainAudio.paused) {
-        mainAudio.play();
-        document.getElementById('play-pause').textContent = 'Pause';
+document.getElementById('play-pause').onclick = () => {
+    const audio = document.getElementById('main-audio');
+    if (audio.paused) {
+        audio.play();
     } else {
-        mainAudio.pause();
-        document.getElementById('play-pause').textContent = 'Play';
+        audio.pause();
     }
-});
+};
 
-document.getElementById('next').addEventListener('click', function() {
-    if (currentTrackIndex < tracks.length - 1) {
-        currentTrackIndex++;
-        playCurrentTrack();
-    }
-});
-
-document.getElementById('auto-play').addEventListener('click', function() {
+document.getElementById('auto-play').onclick = () => {
     autoPlay = !autoPlay;
     document.getElementById('auto-play').textContent = `Auto Play: ${autoPlay ? 'On' : 'Off'}`;
-});
+};
 
-function showMusicContainer(index, audioSrc, title) {
-    const musicContainer = document.getElementById('music-container');
-    const mainAudio = document.getElementById('main-audio');
-    const searchAudios = document.querySelectorAll('.search-audio');
-
-    stopOtherAudios(mainAudio);
-
-    mainAudio.src = audioSrc;
-    document.getElementById('current-track-title').textContent = title;
-    musicContainer.style.display = 'block';
-    mainAudio.play();
-    document.getElementById('play-pause').textContent = 'Pause';
-
-    mainAudio.addEventListener('play', function() {
-        searchAudios.forEach(audio => {
-            audio.currentTime = mainAudio.currentTime;
-            audio.pause();
-        });
-    });
-
-    mainAudio.addEventListener('pause', function() {
-        searchAudios.forEach(audio => {
-            audio.pause();
-        });
-    });
-
-    mainAudio.addEventListener('ended', function() {
-        if (autoPlay && currentTrackIndex < tracks.length - 1) {
-            currentTrackIndex++;
-            playCurrentTrack();
-        }
-    });
-
-    currentTrackIndex = index;
+function addToFavorites(track) {
+    favoritePlaylist.push(track);
+    alert(`${track.title} added to favorites.`);
 }
 
-function stopOtherAudios(currentAudio) {
-    const audios = document.querySelectorAll('audio');
-    audios.forEach(audio => {
-        if (audio !== currentAudio) {
-            audio.pause();
-            audio.currentTime = 0;
-        }
-    });
-}
+// User interaction: Login/Register
+const modal = document.getElementById("modal");
+const modalBody = document.getElementById("modal-body");
+const closeModal = document.getElementById("close-modal");
+const userInfoBtn = document.getElementById("user-info-btn");
 
-function playCurrentTrack() {
-    const track = tracks[currentTrackIndex];
-    fetch(`/download?id=${track.id}`).then(response => response.json()).then(downloadData => {
-        const audioSrc = downloadData.status ? downloadData.data.download : track.preview;
-        showMusicContainer(currentTrackIndex, audioSrc, track.title);
-    });
-            }
+closeModal.onclick = () => modal.style.display = "none";
+
+document.getElementById("register").onclick = function () {
+    modalBody.innerHTML = `
+        <h2>Register</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="reg-username">
+        <label for="password">Password:</label>
+        <input type="password" id="reg-password">
+        <button id="register-submit">Register</button>
+    `;
+    modal.style.display = "block";
+
+    document.getElementById("register-submit").onclick = function () {
+        const username = document.getElementById("reg-username").value;
+        const password = document.getElementById("reg-password").value;
+        alert(`Registered successfully as ${username}.`);
+        modal.style.display = "none";
+    };
+};
+
+document.getElementById("login").onclick = function () {
+    modalBody.innerHTML = `
+        <h2>Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="login-username">
+        <label for="password">Password:</label>
+        <input type="password" id="login-password">
+        <button id="login-submit">Login</button>
+    `;
+    modal.style.display = "block";
+
+    document.getElementById("login-submit").onclick = function () {
+        const username = document.getElementById("login-username").value;
+        alert(`Logged in successfully as ${username}.`);
+        document.getElementById("login").style.display = "none";
+        document.getElementById("logout").style.display = "block";
+        modal.style.display = "none";
+    };
+};
+
+document.getElementById("logout").onclick = function () {
+    alert("Logged out successfully.");
+    document.getElementById("login").style.display = "block";
+    document.getElementById("logout").style.display = "none";
+};
