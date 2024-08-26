@@ -1,4 +1,5 @@
-// Fungsi untuk pencarian musik
+// Fungsi night mode dan light mode serta tombolnya telah dihapus
+
 document.getElementById('search-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const query = document.getElementById('search-query').value;
@@ -74,7 +75,6 @@ document.getElementById('search-form').addEventListener('submit', async function
     }
 });
 
-// Fungsi untuk kembali ke halaman pencarian
 document.getElementById('back-button').addEventListener('click', function() {
     document.getElementById('search-form').style.display = 'flex';
     document.getElementById('back-button').style.display = 'none';
@@ -82,12 +82,10 @@ document.getElementById('back-button').addEventListener('click', function() {
     document.getElementById('home-footer').style.display = 'block';
 });
 
-// Fungsi untuk membuka halaman pencipta
 document.getElementById('creator-button').addEventListener('click', function() {
     window.location.href = 'https://zals.zalxzhu.my.id';
 });
 
-// Fungsi untuk menyembunyikan kontainer musik
 document.getElementById('hide-music').addEventListener('click', function() {
     const musicContainer = document.getElementById('music-container');
     const showButton = document.getElementById('show-music');
@@ -95,7 +93,6 @@ document.getElementById('hide-music').addEventListener('click', function() {
     showButton.style.display = 'block';
 });
 
-// Fungsi untuk menampilkan kembali kontainer musik
 document.getElementById('show-music').addEventListener('click', function() {
     const musicContainer = document.getElementById('music-container');
     const showButton = document.getElementById('show-music');
@@ -103,7 +100,6 @@ document.getElementById('show-music').addEventListener('click', function() {
     showButton.style.display = 'none';
 });
 
-// Fungsi untuk menutup kontainer musik
 document.getElementById('close-music').addEventListener('click', function() {
     const musicContainer = document.getElementById('music-container');
     const mainAudio = document.getElementById('main-audio');
@@ -113,7 +109,6 @@ document.getElementById('close-music').addEventListener('click', function() {
     mainAudio.pause();
 });
 
-// Fungsi untuk memainkan lagu sebelumnya
 document.getElementById('prev').addEventListener('click', function() {
     if (currentTrackIndex > 0) {
         currentTrackIndex--;
@@ -121,7 +116,6 @@ document.getElementById('prev').addEventListener('click', function() {
     }
 });
 
-// Fungsi untuk mengatur tombol play dan pause
 document.getElementById('play-pause').addEventListener('click', function() {
     const mainAudio = document.getElementById('main-audio');
     if (mainAudio.paused) {
@@ -133,7 +127,6 @@ document.getElementById('play-pause').addEventListener('click', function() {
     }
 });
 
-// Fungsi untuk memainkan lagu berikutnya
 document.getElementById('next').addEventListener('click', function() {
     if (currentTrackIndex < tracks.length - 1) {
         currentTrackIndex++;
@@ -141,13 +134,11 @@ document.getElementById('next').addEventListener('click', function() {
     }
 });
 
-// Fungsi untuk mengatur mode auto-play
 document.getElementById('auto-play').addEventListener('click', function() {
     autoPlay = !autoPlay;
     document.getElementById('auto-play').textContent = `Auto Play: ${autoPlay ? 'On' : 'Off'}`;
 });
 
-// Fungsi untuk menampilkan kontainer musik dan memutar audio
 function showMusicContainer(index, audioSrc, title) {
     const musicContainer = document.getElementById('music-container');
     const mainAudio = document.getElementById('main-audio');
@@ -184,7 +175,6 @@ function showMusicContainer(index, audioSrc, title) {
     currentTrackIndex = index;
 }
 
-// Fungsi untuk menghentikan audio lain saat satu audio diputar
 function stopOtherAudios(currentAudio) {
     const audios = document.querySelectorAll('audio');
     audios.forEach(audio => {
@@ -195,11 +185,10 @@ function stopOtherAudios(currentAudio) {
     });
 }
 
-// Fungsi untuk memainkan lagu saat ini
 function playCurrentTrack() {
     const track = tracks[currentTrackIndex];
     fetch(`/download?id=${track.id}`).then(response => response.json()).then(downloadData => {
         const audioSrc = downloadData.status ? downloadData.data.download : track.preview;
         showMusicContainer(currentTrackIndex, audioSrc, track.title);
     });
-    }
+            }
